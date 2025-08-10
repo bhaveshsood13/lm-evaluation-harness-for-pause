@@ -406,9 +406,13 @@ class TemplateAPI(TemplateLM):
 
     def decode_batch(self, tokens: List[List[int]]) -> List[str]:
         if self.tokenizer_backend == "huggingface":
-            return self.tokenizer.batch_decode(tokens)
+            texts =  self.tokenizer.batch_decode(tokens)
         elif self.tokenizer_backend == "tiktoken":
-            return self.tokenizer.decode_batch(tokens)
+            texts =  self.tokenizer.decode_batch(tokens)
+        else:
+            raise ValueError(f"Unknown tokenizer backend: {self.tokenizer_backend}")
+        return [t.replace("[PAUSE]", "") for t in texts]
+
 
     def model_call(
         self,

@@ -248,6 +248,8 @@ class MultiTokenEOSCriteria(transformers.StoppingCriteria):
 
         lookback_tokens_batch = self.tokenizer.batch_decode(lookback_ids_batch)
 
+        lookback_tokens_batch = [text.replace("[PAUSE]", "") for text in lookback_tokens_batch]
+
         for i, done in enumerate(self.done_tracker):
             if not done:
                 self.done_tracker[i] = self.sequence in lookback_tokens_batch[i]

@@ -904,7 +904,9 @@ class HFLM(TemplateLM):
         return encoding["input_ids"], encoding["attention_mask"]
 
     def tok_decode(self, tokens: Iterator[list[str]], skip_special_tokens: bool = True):
-        return self.tokenizer.decode(tokens, skip_special_tokens=skip_special_tokens)
+        output = self.tokenizer.decode(tokens, skip_special_tokens=skip_special_tokens)
+        output = output.replace("[PAUSE]", "")
+        return output
 
     def _model_call(
         self,
